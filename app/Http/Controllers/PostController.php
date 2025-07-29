@@ -29,7 +29,7 @@ class PostController extends Controller
 
         return response()->json([
             'message' => 'Post created successfully',
-            'data' => $post->load('website')
+            'post' => $post->load('website')
         ], 201);
     }
 

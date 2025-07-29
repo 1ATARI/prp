@@ -38,19 +38,19 @@ class SendPostNotificationsCommand extends Command
 
             SendPostNotificationJob::dispatch($post);
             $this->info("Notification job queued for post: {$post->title}");
+
         } else {
-            $allPosts = Post::all();
 
-            if ($allPosts->isEmpty()) {
-                $this->info('No recent posts found.');
-                return 0;
-            }
+            Post::chunk(100, function ($posts) {
+                foreach ($posts as $post) {
+                    SendPostNotificationJob::dispatch($post);
+                }
+            });
 
-            foreach ($allPosts as $post) {
-                SendPostNotificationJob::dispatch($post);
-            }
 
-            $this->info("Notification jobs queued for {$allPosts->count()} posts.");
+
+
+            $this->info("Notification jobs queued for posts.");
         }
     }
 }
