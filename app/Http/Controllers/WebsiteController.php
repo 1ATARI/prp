@@ -40,4 +40,26 @@ class WebsiteController extends Controller
             'data' => $website
         ], 201);
     }
+    public function destroy(Website $website): JsonResponse
+    {
+        $website->delete();
+
+        return response()->json([
+            'message' => 'Website deleted successfully',
+        ], 204);
+
+    }
+    public function update(Website $website , Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'url' => 'required|url|unique:websites,url,' . $website->id,
+            'description' => 'nullable|string',
+        ]);
+        $website->update($request->all());
+        return response()->json([
+            'message' => 'Website updated successfully',
+            'data' => $website
+        ]);
+    }
 }

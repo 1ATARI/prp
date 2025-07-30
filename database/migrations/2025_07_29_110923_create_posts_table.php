@@ -17,8 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->foreignId('website_id')
                 ->constrained('websites')
-                ->onDelete('cascade')
-                ->index();
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

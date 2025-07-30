@@ -21,7 +21,7 @@ return new class extends Migration
                 ->constrained('posts')
                 ->onDelete('cascade');
 
-            $table->timestamps('sent_at');
+            $table->timestamp('sent_at');
             $table->unique(['user_id', 'post_id']);
             $table->timestamps();
         });

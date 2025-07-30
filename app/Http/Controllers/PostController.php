@@ -9,19 +9,16 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 class PostController extends Controller
 {
-    public function store(Request $request , Website $website): JsonResponse
+    public function store(Website $website , Request $request ): JsonResponse
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
             'content' => 'nullable|string',
         ]);
 
         $post =  $website->posts()->create([
             'title' => $request->title,
-            'description' => $request->description,
             'content' => $request['content'],
-            'published_at' => now(),
         ]);
 
 
@@ -47,6 +44,28 @@ class PostController extends Controller
     {
         return response()->json([
             'message' => 'Post retrieved successfully',
+            'data' => $post->load('website')
+        ]);
+    }
+    public function destroy(Post $post): JsonResponse
+    {
+        $post->delete();
+
+        return response()->json([
+            'message' => 'Post deleted successfully',
+        ], 204);
+    }
+    public function update(Post $post, Request $request): JsonResponse
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
+        ]);
+
+        $post->update($request->all());
+
+        return response()->json([
+            'message' => 'Post updated successfully',
             'data' => $post->load('website')
         ]);
     }
