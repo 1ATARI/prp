@@ -42,7 +42,7 @@ class PostNotificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.PostNotification',
+            markdown: 'emails.PostNotification',
             with: [
                 'post' => $this->post,
                 'user' => $this->user,
